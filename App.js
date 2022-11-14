@@ -1,66 +1,58 @@
 import React from 'react';
 import {
     SafeAreaView,
-    ScrollView,
     StatusBar,
     StyleSheet,
     useColorScheme,
-    View,
 } from 'react-native';
 
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { QueryClient, QueryClientProvider } from 'react-query';
+import { Provider } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react'
 import {
     Colors,
-    Header,
 } from 'react-native/Libraries/NewAppScreen';
+import { store, persistor } from './src/redux/store'
+import Home from './src/Views/Home.view';
 
 function App() {
     const isDarkMode = useColorScheme() === 'dark';
+    const Stack = createNativeStackNavigator();
+    const queryClient = new QueryClient()
 
     const backgroundStyle = {
         backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
     };
 
     return (
-        <SafeAreaView style={backgroundStyle}>
-            <StatusBar
-                barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-                backgroundColor={backgroundStyle.backgroundColor}
-            />
-            <ScrollView
-                contentInsetAdjustmentBehavior="automatic"
-                style={backgroundStyle}
-            >
-                <Header />
-                <View
-                    style={{
-                        backgroundColor: isDarkMode ? Colors.black : Colors.white,
-                    }}
-                />
-            </ScrollView>
-        </SafeAreaView>
+        <Provider store={store}>
+            <PersistGate loading={null} persistor={persistor}>
+                <QueryClientProvider client={queryClient}>
+                    <SafeAreaView style={{ flex: 1 }}>
+                        <StatusBar
+                            barStyle={isDarkMode ? 'light-content' : 'dark-content'}
+                            backgroundColor={backgroundStyle.backgroundColor}
+                            translucent={false}
+                            hidden={false}
+                        />
+                        <NavigationContainer>
+                            <Stack.Navigator>
+                                <Stack.Screen name="Home" component={Home} options={{ animation: 'fade', headerShown: false }} />
+                                {/* <Stack.Screen name="UserView" component={UserView} options={{ animation: 'fade', headerShown: false }} /> */}
+
+                            </Stack.Navigator>
+                        </NavigationContainer>
+                    </SafeAreaView>
+                </QueryClientProvider>
+            </PersistGate>
+        </Provider>
+
     )
 }
 
-const styles = StyleSheet.create({
-
-    // sectionContainer: {
-    //     marginTop: 32,
-    //     paddingHorizontal: 24,
-    // },
-    // sectionTitle: {
-    //     fontSize: 24,
-    //     fontWeight: '600',
-    // },
-
-    // sectionDescription: {
-    //     marginTop: 8,
-    //     fontSize: 18,
-    //     fontWeight: '400',
-    // },
-    // highlight: {
-    //     fontWeight: '700',
-    // },
-
-});
+// eslint-disable-next-line no-unused-vars
+const styles = StyleSheet.create({ });
 
 export default App;
