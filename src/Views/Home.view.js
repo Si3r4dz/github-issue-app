@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -10,50 +9,43 @@ import {
     BackHandler,
     ActivityIndicator,
 } from 'react-native';
-import { AddIssueToList } from '../redux/slices/issueSlice';
+import { AddIssues, AddSelectedIssue } from '../redux/slices/issueSlice';
 import SearchBar from '../Components/searchBar';
 import ResultsBar from '../Components/resultsBar';
 import useApi from '../Hooks/useApi';
 import fromIssueApi from '../Adapters/IssueApiAdapter';
 import IssueListElement from '../Components/issueListElement';
 import isCloseToBottom from '../Utils/isCloseToBottom';
+import { DEFAULT_REPOSITOTY } from '../../variable';
 
 function Home({ navigation }) {
     const repositoryName = 'facebook/react-native'
-
     const dispatch = useDispatch()
     const issuesList = useSelector((state) => state.issue.issueList)
 
     const [searchText, setSearchText] = useState('')
+    const [error, setError] = useState('')
     const [page, setPage] = useState(1)
+    const [resultsCount, setResultsCount] = useState(0)
 
     const fetchIssues = useApi({
-        url: `/search/issues?q=is:issue%20repo:${repositoryName}&page=${page}&per_page=10`,
+        url: `/search/issues?q=is:issue%20repo:${DEFAULT_REPOSITOTY}&page=${page}&per_page=20`,
         queryName: ['Issues'],
         fromApiAdapter: fromIssueApi,
     })
 
+    const handleOnIssuePress = (item) => {
+        dispatch(AddSelectedIssue(item))
+        navigation.navigate('IssueView')
+    }
     useEffect(() => {
         if (fetchIssues.isSuccess && !fetchIssues.isFetching) {
-            dispatch(AddIssueToList(fetchIssues.data))
+            dispatch(AddIssues(fetchIssues.data))
         }
         if (fetchIssues.isError) {
-            console.log('error validation')
+            setError(fetchIssues.error.message)
         }
     }, [fetchIssues.isFetching])
-
-    useEffect(() => {
-        const fetchTimeOut = setTimeout(() => {
-            if (searchText.length > 2) {
-                let dupa = 'asd'
-                // eslint-disable-next-line no-unused-vars
-                dupa = searchText
-            }
-        }, 200)
-        return () => {
-            clearTimeout(fetchTimeOut)
-        }
-    }, [searchText])
 
     useEffect(() => {
         const backhandler = BackHandler.addEventListener('hardwareBackPress', () => false)
@@ -64,36 +56,39 @@ function Home({ navigation }) {
         fetchIssues.refetch()
     }, [page])
 
+    useEffect(() => {
+        setResultsCount(Object.keys(issuesList).length)
+    }, [issuesList])
+
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <SearchBar
-                placeholder={repositoryName}
+                placeholder={DEFAULT_REPOSITOTY}
                 onChangeInputText={setSearchText}
             />
             <ResultsBar
-                resultsCount={Object.keys(issuesList).length}
+                resultsCount={resultsCount}
             />
             {fetchIssues.status === 'success'
                 ? (
                     <ScrollView
                         onMomentumScrollEnd={({ nativeEvent }) => {
-                            if (isCloseToBottom(nativeEvent) && !fetchIssues.isFetching && Object.keys(issuesList).length > 0) {
+                            if (isCloseToBottom(nativeEvent) && !fetchIssues.isFetching && resultsCount > 0) {
                                 // eslint-disable-next-line no-return-assign
                                 setPage((number) => number += 1)
                             }
                         }}
                     >
                         {/* eslint-disable-next-line no-console */}
-                        {Object.entries(issuesList).map(([key, value]) => (
-                            <IssueListElement item={value} key={key} />
+                        {Object.entries(issuesList).reverse().map(([key, value]) => (
+                            <IssueListElement item={value} key={key} onPress={handleOnIssuePress} />
                         ))}
                     </ScrollView>
 
                 )
                 : (
-
                     <View style={{ alignSelf: 'center', marginTop: 10 }}>
-                        <Text>Loading dataaa</Text>
+                        <Text>{error.length > 0 ? error : 'Loading Data' }</Text>
                     </View>
 
                 )}

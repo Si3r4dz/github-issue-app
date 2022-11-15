@@ -15,7 +15,6 @@
     "@react-navigation/native-stack": "*",
     "@reduxjs/toolkit": "^1.9.0",
     "axios": "^0.27.2",
-    "babel-plugin-transform-inline-environment-variables": "^0.4.4",
     "react": "18.1.0",
     "react-native": "0.70.5",
     "react-native-dotenv": "^3.4.2",

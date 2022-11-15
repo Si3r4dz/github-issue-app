@@ -1,22 +1,27 @@
 import axios from 'axios'
 import { useQuery } from 'react-query'
+import { API_KEY, API_URL } from '../../variable'
+
 import fromApiCallError from '../Adapters/ErrorsApiAdapter'
 
-const apiUrl = 'https://api.github.com'
-const apiKey = ''
-
-const headers = (key) => {
-    const authHeaders = {
-        'Content-Type': 'application/json',
-        Authorization: `Token ${key}`,
+const getHeaders = (key) => {
+    if (key !== '') {
+        const authHeaders = {
+            'Content-Type': 'application/json',
+            Authorization: `Token ${key}`,
+        }
+        return authHeaders
     }
-    return authHeaders
+    const headers = {
+        'Content-Type': 'application/json',
+    }
+    return headers
 }
 
 const apiGetData = async (url) => {
     if (url !== null && url !== undefined && url !== '') {
         // eslint-disable-next-line no-console
-        return axios.get(`${apiUrl}${url}`, { headers: headers(apiKey) })
+        return axios.get(`${API_URL}${url}`, { headers: getHeaders(API_KEY) })
     }
     return null
 }

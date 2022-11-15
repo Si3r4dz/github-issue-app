@@ -5,7 +5,6 @@ import {
     StyleSheet,
     useColorScheme,
 } from 'react-native';
-
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { QueryClient, QueryClientProvider } from 'react-query';
@@ -16,6 +15,7 @@ import {
 } from 'react-native/Libraries/NewAppScreen';
 import { store, persistor } from './src/redux/store'
 import Home from './src/Views/Home.view';
+import IssueView from './src/Views/Issue.view';
 
 function App() {
     const isDarkMode = useColorScheme() === 'dark';
@@ -40,7 +40,7 @@ function App() {
                         <NavigationContainer>
                             <Stack.Navigator>
                                 <Stack.Screen name="Home" component={Home} options={{ animation: 'fade', headerShown: false }} />
-                                {/* <Stack.Screen name="UserView" component={UserView} options={{ animation: 'fade', headerShown: false }} /> */}
+                                <Stack.Screen name="IssueView" component={IssueView} options={{ animation: 'fade', headerShown: false }} />
 
                             </Stack.Navigator>
                         </NavigationContainer>
@@ -52,7 +52,6 @@ function App() {
     )
 }
 
-// eslint-disable-next-line no-unused-vars
 const styles = StyleSheet.create({ });
 
 export default App;
