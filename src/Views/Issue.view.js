@@ -49,9 +49,9 @@ function IssueView({ navigation }) {
         return () => backhandler.remove()
     }, [navigation])
     return (
-        <SafeAreaView style={{ flex: 1 }}>
-            <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' && 'padding'}>
-                <ScrollView contentContainerStyle={{ flexGrow: 1 }} ref={scrollViewRef}>
+        <SafeAreaView style={styles.safeAreaStyles}>
+            <KeyboardAvoidingView style={styles.safeAreaStyles} behavior={Platform.OS === 'ios' && 'padding'}>
+                <ScrollView contentContainerStyle={styles.scrollViewStyles} ref={scrollViewRef}>
                     <View style={styles.mainContainer}>
                         <View style={styles.titleBox}>
                             <Text style={styles.titleText}>
@@ -117,6 +117,12 @@ function IssueView({ navigation }) {
 }
 
 const styles = StyleSheet.create({
+    safeAreaStyles: {
+        felx: 1,
+    },
+    scrollViewStyles: {
+        felxGrow: 1,
+    },
     mainContainer: {
         width: '100%',
         justifyContent: 'center',

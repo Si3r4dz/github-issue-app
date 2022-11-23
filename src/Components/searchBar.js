@@ -5,7 +5,7 @@ const searchBar = ({ placeholder, onChangeInputText }) => (
     <View
         style={styles.view}
     >
-        <View style={{ width: '85%' }}>
+        <View style={styles.box}>
             <TextInput
                 style={styles.textInput}
                 placeholder={placeholder}
@@ -36,6 +36,9 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         paddingLeft: '2.5%',
         paddingRight: '2.5%',
+    },
+    box: {
+        width: '85%',
     },
 });
 

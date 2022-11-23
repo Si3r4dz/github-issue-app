@@ -15,12 +15,8 @@ function IssueListElement({ item, onPress }) {
             style={styles.issueContainer}
             onPress={() => onPress(item)}
         >
-            <View style={{
-                flexDirection: 'row',
-                padding: 10,
-            }}
-            >
-                <View style={{ justifyContent: 'center', width: '90%' }}>
+            <View style={styles.container}>
+                <View style={styles.containerBox}>
 
                     <Text style={styles.issueTitle}>
                         {item.title}
@@ -75,6 +71,14 @@ const styles = StyleSheet.create({
         fontSize: 12,
         color: '##6F7781',
         fontWeight: '800',
+    },
+    container: {
+        flexDirection: 'row',
+        padding: 10,
+    },
+    containerBox: {
+        justifyContent: 'center',
+        width: '90%',
     },
     box: {
         flexDirection: 'row',

@@ -30,7 +30,7 @@ function App() {
         <Provider store={store}>
             <PersistGate loading={null} persistor={persistor}>
                 <QueryClientProvider client={queryClient}>
-                    <SafeAreaView style={{ flex: 1 }}>
+                    <SafeAreaView style={styles.safeArea}>
                         <StatusBar
                             barStyle={isDarkMode ? 'light-content' : 'dark-content'}
                             backgroundColor={backgroundStyle.backgroundColor}
@@ -52,6 +52,10 @@ function App() {
     )
 }
 
-const styles = StyleSheet.create({ });
+const styles = StyleSheet.create({
+    safeArea: {
+        flex: 1,
+    },
+});
 
 export default App;

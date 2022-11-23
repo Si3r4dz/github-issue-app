@@ -61,7 +61,7 @@ function Home({ navigation }) {
     }, [issuesList])
 
     return (
-        <SafeAreaView style={{ flex: 1 }}>
+        <SafeAreaView style={styles.safeArea}>
             <SearchBar
                 placeholder={DEFAULT_REPOSITOTY}
                 onChangeInputText={setSearchText}
@@ -87,19 +87,25 @@ function Home({ navigation }) {
 
                 )
                 : (
-                    <View style={{ alignSelf: 'center', marginTop: 10 }}>
+                    <View style={styles.infoBox}>
                         <Text>{error.length > 0 ? error : 'Loading Data' }</Text>
                     </View>
 
                 )}
             {fetchIssues.isRefetching
             && (
-                <ActivityIndicator size="large" color="#24292F" style={{ padding: 10 }} />
+                <ActivityIndicator size="large" color="#24292F" style={styles.activity} />
             )}
         </SafeAreaView>
     );
 }
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+    safeArea: {
+        flex: 1,
+    },
+    infoBox: { alignSelf: 'center', marginTop: 10 },
+    activity: { padding: 10 },
+});
 
 export default Home;
